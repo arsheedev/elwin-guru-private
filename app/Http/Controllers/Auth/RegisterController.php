@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Models\District;
@@ -37,6 +38,7 @@ class RegisterController extends Controller
             'district_id' => 'required|exists:districts,id',
             'village_id' => 'required|exists:villages,id',
             'subject_id' => 'required_if:role,teacher|nullable|exists:subjects,id',
+            'profile_image' => 'required_if:role,teacher|nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = User::create([
@@ -56,6 +58,11 @@ class RegisterController extends Controller
                 'village_id' => $validated['village_id'],
             ]);
         } elseif ($user->role === 'teacher') {
+            $imagePath = null;
+            if ($request->hasFile('profile_image')) {
+                $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            }
+
             Teacher::create([
                 'user_id' => $user->id,
                 'no_telepon' => $validated['no_telepon'],
@@ -64,6 +71,7 @@ class RegisterController extends Controller
                 'district_id' => $validated['district_id'],
                 'village_id' => $validated['village_id'],
                 'subject_id' => $validated['subject_id'],
+                'profile_image' => $imagePath,
                 'average_ratings' => 0,
             ]);
         }

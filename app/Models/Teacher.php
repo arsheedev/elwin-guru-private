@@ -18,6 +18,7 @@ class Teacher extends Model
         'district_id',
         'village_id',
         'subject_id',
+        'profile_image',
     ];
 
     public function user()

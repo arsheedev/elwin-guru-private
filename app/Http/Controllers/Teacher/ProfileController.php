@@ -10,6 +10,7 @@ use App\Models\Village;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -38,6 +39,7 @@ class ProfileController extends Controller
             'district_id' => 'required',
             'village_id' => 'required',
             'subject_id' => 'required',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = Auth::user();
@@ -50,17 +52,26 @@ class ProfileController extends Controller
             abort(403, 'Unauthorized. Teacher profile not found.');
         }
 
-        $teacher->update([
-            'no_telepon' => $request->no_telepon,
-            'province_id' => $request->province_id,
-            'regency_id' => $request->regency_id,
-            'district_id' => $request->district_id,
-            'village_id' => $request->village_id,
-            'subject_id' => $request->subject_id,
-        ]);
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($teacher->profile_image && Storage::disk('public')->exists($teacher->profile_image)) {
+                Storage::disk('public')->delete($teacher->profile_image);
+            }
+
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $teacher->profile_image = $imagePath;
+        }
+
+        $teacher->no_telepon = $request->no_telepon;
+        $teacher->province_id = $request->province_id;
+        $teacher->regency_id = $request->regency_id;
+        $teacher->district_id = $request->district_id;
+        $teacher->village_id = $request->village_id;
+        $teacher->subject_id = $request->subject_id;
+
+        $teacher->save();
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
-
 }
-
