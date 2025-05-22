@@ -161,7 +161,6 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
     position: relative;
     overflow: hidden;
     }
