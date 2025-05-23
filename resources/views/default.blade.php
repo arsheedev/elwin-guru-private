@@ -141,7 +141,8 @@
         }
 
         .hero-section button,
-        .hero-section a.reset-button {
+        .hero-section a.reset-button,
+        .teacher-card a.profile-button {
             background-color: #3b82f6;
             color: #ffffff;
             padding: 0.75rem 2rem;
@@ -152,7 +153,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-left: 1rem;
             text-decoration: none;
             display: inline-block;
         }
@@ -162,12 +162,19 @@
         }
 
         .hero-section button:hover,
-        .hero-section a.reset-button:hover {
+        .hero-section a.reset-button:hover,
+        .teacher-card a.profile-button:hover {
             background-color: #2563eb;
         }
 
         .hero-section a.reset-button:hover {
             background-color: #4b5563;
+        }
+
+        .teacher-card a.profile-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
         }
 
         /* CTA Section Styles */
@@ -374,7 +381,8 @@
             }
 
             .hero-section button,
-            .hero-section a.reset-button {
+            .hero-section a.reset-button,
+            .teacher-card a.profile-button {
                 margin-top: 1rem;
                 margin-left: 0;
                 width: 100%;
@@ -483,6 +491,7 @@
                         <p>Mata Pelajaran: {{ $teacher->subject->name }}</p>
                         <p>Provinsi: {{ $teacher->province->name }}</p>
                         <p>Kota: {{ $teacher->regency->name }}</p>
+                        <a href="{{ route('teachers.show', $teacher->id) }}" class="profile-button">Lihat Profil</a>
                     </div>
                 @endforeach
             </div>
@@ -507,8 +516,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- Testimonial Section -->
     <div class="testimonial-wrapper">
@@ -558,8 +565,6 @@
         </div>
     </div>
 
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Cascading dropdowns
@@ -606,8 +611,8 @@
                 @endif
             @endif
 
-                                    // Testimonial carousel logic
-                                    const items = document.querySelectorAll('.testimonial-item');
+                // Testimonial carousel logic
+                const items = document.querySelectorAll('.testimonial-item');
             let current = 0;
 
             setInterval(() => {
