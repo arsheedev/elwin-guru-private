@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         $role = Auth::user()->role;
 
         return match ($role) {
-            'admin' => redirect('/admin'),
+            'admin' => redirect('/admin/users'),
             'teacher' => redirect('/teacher'),
             'student' => redirect('/student'),
             default => redirect('/'),
