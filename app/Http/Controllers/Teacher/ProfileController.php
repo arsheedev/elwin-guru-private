@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+
+    public function index()
+    {
+        $user = Auth::user();
+        $teacher = $user->teacher;
+
+        if (!$teacher) {
+            abort(403, 'Unauthorized. Teacher profile not found.');
+        }
+
+        return view('teacher.index', compact('user', 'teacher'));
+    }
     public function edit()
     {
         $user = Auth::user();

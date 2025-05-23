@@ -20,12 +20,12 @@
       <div class="profile-picture-section">
       <div class="profile-picture-wrapper">
         <img
-        src="{{ $teacher->profile_picture ? asset('storage/' . $teacher->profile_picture) : asset('images/default-profile.png') }}"
-        alt="Foto Profil" class="profile-picture-img" id="profile-picture-preview">
+        src="{{ $teacher->profile_image ? asset('storage/' . $teacher->profile_image) : asset('images/default-profile.png') }}"
+        alt="Foto Profil" class="profile-picture-img" id="profile-image-preview">
       </div>
-      <label for="profile_picture" class="profile-picture-label">Pilih Foto Profil</label>
-      <input type="file" name="profile_picture" id="profile_picture" class="profile-picture-input" accept="image/*">
-      @error('profile_picture')
+      <label for="profile_image" class="profile-picture-label">Pilih Foto Profil</label>
+      <input type="file" name="profile_image" id="profile_image" class="profile-picture-input" accept="image/*">
+      @error('profile_image')
       <span class="error-message">{{ $message }}</span>
     @enderror
       </div>
@@ -51,6 +51,7 @@
       @enderror
       </div>
 
+      <!-- Provinsi -->
       <div class="form-group">
         <label for="province_id" class="form-label">Provinsi (Opsional)</label>
         <select id="province_id" name="province_id" class="form-control">
@@ -356,15 +357,15 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
     // Pratinjau Foto Profil
-    const profilePictureInput = document.getElementById('profile_picture');
-    const profilePicturePreview = document.getElementById('profile-picture-preview');
+    const profileImageInput = document.getElementById('profile_image');
+    const profileImagePreview = document.getElementById('profile-image-preview');
 
-    profilePictureInput.addEventListener('change', function () {
+    profileImageInput.addEventListener('change', function () {
       const file = this.files[0];
       if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-        profilePicturePreview.src = e.target.result;
+        profileImagePreview.src = e.target.result;
       };
       reader.readAsDataURL(file);
       }

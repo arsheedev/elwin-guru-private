@@ -33,6 +33,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 // Teacher Routes
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/', [ProfileController::class, 'index'])->name('teacher.profile.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
