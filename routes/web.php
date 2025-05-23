@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Student\RatingController;
 use App\Http\Controllers\Student\StudentController;
@@ -12,9 +13,10 @@ use App\Http\Controllers\Teacher\ProfileController;
 use App\Http\Controllers\Teacher\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomepageController::class, 'index'])->name('home');
+Route::get('/teachers/{id}', [HomepageController::class, 'show'])->name('teachers.show');
+
+
 
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
@@ -37,6 +39,10 @@ Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('teacher.schedules.index');
+    Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('teacher.schedules.create');
+    Route::get('/schedules/{schedule}/edit', [ScheduleController::class, 'edit'])->name('teacher.schedules.edit');
+    Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('teacher.schedules.destroy');
     Route::resource('schedules', ScheduleController::class)->except(['show']);
 
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.teacher.index');

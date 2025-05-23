@@ -90,8 +90,9 @@
             <!-- Submenu -->
             <div class="submenu fade-in">
                 <a href="/teacher" class="nav-link">Profile</a>
-                <a href="/ratings" class="nav-link">Ratings</a>
-                <a href="/schedule" class="nav-link">Schedule</a>
+                <a href="/teacher/ratings" class="nav-link">Ratings</a>
+                <a href="/teacher/schedules" class="nav-link">Schedule</a>
+                <a href="/teacher/bookings" class="nav-link">Bookings</a>
             </div>
         </div>
     </nav>

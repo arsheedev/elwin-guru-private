@@ -157,7 +157,7 @@
                 </div>
                 <div class="role-container">
                     <span class="role">{{ $user->role }}</span>
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout') }}" method="GET">
                         @csrf
                         <button type="submit" class="logout-button">Logout</button>
                     </form>
