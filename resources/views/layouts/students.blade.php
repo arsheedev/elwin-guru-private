@@ -11,7 +11,24 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-                <a href="{{ url('/') }}" class="brand-link animate-gradient">SmartTutor</a>
+                <a href="{{ url('/student') }}" class="brand-link animate-gradient">SmartTutor</a>
+            </div>
+            <div class="navbar-links">
+                <a href="{{ url('/student') }}" class="nav-link {{ request()->is('/student') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    <span>Beranda</span>
+                </a>
+                <a href="/student/bookings" class="nav-link {{ request()->is('bookings') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>Booking</span>
+                </a>
             </div>
             <div class="navbar-menu">
                 @guest
@@ -107,6 +124,49 @@
 
         .navbar-brand .brand-link:hover {
             transform: scale(1.05);
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+            margin-left: 2rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        .nav-link.active {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            border-radius: 2px;
         }
 
         .navbar-menu {
@@ -271,6 +331,7 @@
         }
 
         .glow-effect {
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
@@ -281,7 +342,9 @@
                 radial-gradient(circle 150px at 30% 80%, rgba(59, 130, 246, 0.2) 0%, transparent 100%),
                 radial-gradient(circle 150px at 70% 60%, rgba(59, 130, 246, 0.15) 0%, transparent 100%);
             pointer-events: none;
+            z-index: -1;
         }
+
 
         /* Animasi */
         @keyframes fadeInUp {
@@ -357,8 +420,21 @@
                 padding: 1rem;
             }
 
+            .navbar-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .navbar-links {
+                margin: 1rem 0;
+                justify-content: center;
+                gap: 1rem;
+            }
+
             .navbar-brand .brand-link {
                 font-size: 1.5rem;
+                text-align: center;
+                display: block;
             }
 
             .login-button {
@@ -368,6 +444,7 @@
 
             .navbar-menu {
                 gap: 1rem;
+                justify-content: center;
             }
 
             .profile-popup {
@@ -383,6 +460,10 @@
 
             .content-container {
                 padding: 1rem;
+            }
+
+            .booking-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -406,6 +487,16 @@
                     e.stopPropagation();
                 });
             }
+
+            // Highlight active nav link
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>

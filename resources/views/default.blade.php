@@ -611,8 +611,8 @@
                 @endif
             @endif
 
-                // Testimonial carousel logic
-                const items = document.querySelectorAll('.testimonial-item');
+                    // Testimonial carousel logic
+                    const items = document.querySelectorAll('.testimonial-item');
             let current = 0;
 
             setInterval(() => {

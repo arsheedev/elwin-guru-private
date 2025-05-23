@@ -1,310 +1,374 @@
 @extends('layouts.students')
 
+@section('title', 'Smart Tutor - Find Teachers')
+
 @section('content')
-
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartTutor - @yield('title')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <div class="page-container">
-    <div class="glow-effect"></div>
-    <div class="card">
-    <div class="card-header">
-      <h1 class="card-title animate-gradient">Cari Guru</h1>
-      <p class="card-subtitle">Temukan guru berdasarkan mata pelajaran dan lokasi</p>
-    </div>
-
-    <form method="GET" action="{{ route('student.teachers.search') }}" class="form">
-      <div class="form-row">
-      <! Mata Pelajaran>
-        <div class="form-group">
-        <label for="subject_id" class="form-label">Mata Pelajaran</label>
-        <select name="subject_id" id="subject_id" class="form-select">
-          <option value=""> Semua Mata Pelajaran </option>
-          @foreach($subjects as $subject)
-        <option value="{{ $subject->id }}" {{ $request->subject_id == $subject->id ? 'selected' : '' }}>
-        {{ $subject->name }}
-        </option>
-      @endforeach
-        </select>
-        </div>
-
-        <! Provinsi>
-        <div class="form-group">
-          <label for="province_id" class="form-label">Provinsi</label>
-          <select id="province_id" name="province_id" class="form-select">
-          <option value=""> Pilih Provinsi </option>
-          @foreach($provinces as $province)
-        <option value="{{ $province->id }}" {{ $request->province_id == $province->id ? 'selected' : '' }}>
-        {{ $province->name }}
-        </option>
-      @endforeach
-          </select>
-        </div>
-
-        <! Kabupaten>
-          <div class="form-group">
-          <label for="regency_id" class="form-label">Kabupaten</label>
-          <select id="regency_id" name="regency_id" class="form-select">
-            <option value=""> Pilih Kabupaten </option>
-          </select>
-          </div>
-
-          <! Kecamatan>
-          <div class="form-group">
-            <label for="district_id" class="form-label">Kecamatan</label>
-            <select id="district_id" name="district_id" class="form-select">
-            <option value=""> Pilih Kecamatan </option>
-            </select>
-          </div>
-
-          <! Desa>
-            <div class="form-group">
-            <label for="village_id" class="form-label">Desa</label>
-            <select id="village_id" name="village_id" class="form-select">
-              <option value=""> Pilih Desa </option>
-            </select>
-            </div>
-      </div>
-
-      <div class="form-actions">
-      <button type="submit" class="form-button animate-gradient">Cari</button>
-      <a href="/student" class="reset-button">Reset</a>
-      </div>
-    </form>
-
-    <hr class="divider">
-
-    <div class="results-header">
-      <h2 class="results-title">Hasil Pencarian ({{ $teachers->total() }})</h2>
-    </div>
-
-    @if($teachers->isEmpty())
-    <p class="no-results">Tidak ada guru yang ditemukan.</p>
-    @else
-    <div class="table-container">
-      <table class="results-table">
-      <thead>
-      <tr>
-      <th>Nama</th>
-      <th>Mata Pelajaran</th>
-      <th>Lokasi</th>
-      <th>Telepon</th>
-      <th>Detail</th>
-      </tr>
-      </thead>
-      <tbody>
-      @foreach($teachers as $teacher)
-      <tr>
-      <td>{{ $teacher->user->name }}</td>
-      <td>{{ $teacher->subject->name ?? '-' }}</td>
-      <td>
-      {{ $teacher->province->name ?? '-' }},
-      {{ $teacher->regency->name ?? '-' }},
-      {{ $teacher->district->name ?? '-' }},
-      {{ $teacher->village->name ?? '-' }}
-      </td>
-      <td>{{ $teacher->no_telepon }}</td>
-      <td>
-      <a href="{{ route('student.teachers.show', $teacher->id) }}" class="table-button">Lihat</a>
-      </td>
-      </tr>
-      @endforeach
-      </tbody>
-      </table>
-    </div>
-
-    <div class="pagination">
-      {{ $teachers->withQueryString()->links() }}
-    </div>
-    @endif
-    </div>
-  </div>
-
   <style>
-    body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    /* Kontainer halaman dengan gradien putih */
-    .page-container {
-    min-height: 100vh;
+    /* Hero Section Styles */
+    .hero-section {
+    min-height: 550px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+    background: #ffffff;
+    padding: 2rem 1rem;
+    text-align: center;
+    position: relative;
     overflow: hidden;
     }
 
-    /* Efek glow biru */
+    .hero-section::before,
+    .hero-section::after,
+    .hero-section .bg-circle-1,
+    .hero-section .bg-circle-2,
+    .hero-section .bg-circle-3 {
+    content: '';
+    position: absolute;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0) 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+    }
 
+    .hero-section::before {
+    width: 350px;
+    height: 350px;
+    top: -100px;
+    left: -100px;
+    }
 
-    /* Styling kartu */
-    .card {
-    max-width: 960px;
+    .hero-section::after {
+    width: 400px;
+    height: 400px;
+    bottom: -150px;
+    right: -150px;
+    }
+
+    .hero-section .bg-circle-1 {
+    width: 300px;
+    height: 300px;
+    top: 20%;
+    left: 10%;
+    }
+
+    .hero-section .bg-circle-2 {
+    width: 250px;
+    height: 250px;
+    bottom: 15%;
+    right: 15%;
+    }
+
+    .hero-section .bg-circle-3 {
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: 20%;
+    }
+
+    .text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 16px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    padding: 32px;
-    transform: translateY(20px);
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-out forwards;
-    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
     }
 
-    /* Header kartu */
-    .card-header {
-    margin-bottom: 32px;
-    text-align: center;
-    }
-
-    .card-title {
-    font-size: 1.875rem;
+    .hero-section h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4rem;
     font-weight: 700;
-    color: #2563eb;
-    background: linear-gradient(to right, #2563eb, #1e40af);
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    }
-
-    .card-subtitle {
-    font-size: 0.875rem;
-    color: #4b5563;
-    margin-top: 8px;
-    }
-
-    /* Styling formulir */
-    .form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    }
-
-    .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    }
-
-    .form-group {
-    display: flex;
-    flex-direction: column;
-    }
-
-    .form-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #1f2937;
-    margin-bottom: 8px;
-    }
-
-    .form-select {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.5);
     color: #111827;
-    font-size: 1rem;
-    transition: all 0.3s ease-in-out;
+    margin-bottom: 2rem;
+    }
+
+    .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 3rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+    z-index: 1;
+    }
+
+    .search-row {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    }
+
+    .search-select {
+    flex: 1;
+    min-width: 200px;
+    border: none;
     outline: none;
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    color: #111827;
+    font-family: 'Poppins', sans-serif;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
     }
 
-    .form-select:invalid {
-    color: #9ca3af;
-    }
-
-    .form-select:focus,
-    .form-select:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-    transform: scale(1.01);
+    .search-select:disabled {
+    background-color: #e5e7eb;
+    cursor: not-allowed;
     }
 
     .form-actions {
     display: flex;
-    gap: 16px;
-    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
     }
 
-    .form-button {
-    width: 100%;
-    max-width: 200px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(to right, #3b82f6, #1d4ed8);
-    background-size: 200% 200%;
+    .hero-section button,
+    .hero-section a.reset-button,
+    .teacher-card a.profile-button {
+    background-color: #3b82f6;
     color: #ffffff;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    border: none;
     font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    animation: gradient 4s ease infinite;
-    }
-
-    .form-button:hover {
-    background: linear-gradient(to right, #2563eb, #1e40af);
-    transform: scale(1.02);
-    }
-
-    .form-button:focus {
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
-    }
-
-    .reset-button {
-    width: 100%;
-    max-width: 200px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(to right, #6b7280, #4b5563);
-    background-size: 200% 200%;
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
+    transition: background-color 0.3s;
     text-decoration: none;
-    transition: all 0.3s ease-in-out;
-    animation: gradient 4s ease infinite;
+    display: inline-block;
     }
 
-    .reset-button:hover {
-    background: linear-gradient(to right, #4b5563, #374151);
-    transform: scale(1.02);
+    .hero-section a.reset-button {
+    background-color: #6b7280;
     }
 
-    .reset-button:focus {
-    box-shadow: 0 0 0 4px rgba(107, 114, 128, 0.3);
+    .hero-section button:hover,
+    .hero-section a.reset-button:hover,
+    .teacher-card a.profile-button:hover {
+    background-color: #2563eb;
     }
 
-    /* Pembatas */
-    .divider {
-    border: 0;
-    border-top: 1px solid #e5e7eb;
-    margin: 24px 0;
+    .hero-section a.reset-button:hover {
+    background-color: #4b5563;
     }
 
-    /* Header hasil */
-    .results-header {
-    margin-bottom: 16px;
+    .teacher-card a.profile-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
     }
 
-    .results-title {
+    /* CTA Section Styles */
+    .cta-wrapper {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    }
+
+    .cta-container {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+    margin: 0 auto;
+    max-width: 1200px;
+    position: relative;
+    }
+
+    .cta-container::before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0) 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    top: -90px;
+    right: 15%;
+    z-index: 0;
+    }
+
+    .image-box {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    }
+
+    .image-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    }
+
+    .cta-box {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(254, 215, 170, 0.9);
+    padding: 1.5rem;
+    border-radius: 12px;
+    max-width: 250px;
+    backdrop-filter: blur(4px);
+    }
+
+    .cta-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #7c2d12;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    }
+
+    .detail-button {
+    display: inline-block;
+    background-color: #ea580c;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    }
+
+    .detail-button:hover {
+    background-color: #c2410c;
+    transform: translateY(-2px);
+    }
+
+    /* Testimonial Styles */
+    .testimonial-wrapper {
+    width: 100%;
+    background: #ffffff;
+    }
+
+    .testimonial-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    position: relative;
+    }
+
+    .section-title {
+    text-align: right;
+    margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    }
+
+    .testimonial-quote {
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: #1f2937;
+    font-style: italic;
+    margin-bottom: 2rem;
+    min-height: 180px;
+    line-height: 1.3;
+    text-align: left;
+    padding-right: 2rem;
+    transition: opacity 0.5s ease;
+    }
+
+    .testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    }
+
+    .author-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 1.5rem;
+    border: 3px solid #3b82f6;
+    }
+
+    .author-info {
+    text-align: right;
+    }
+
+    .author-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1f2937;
+    }
+
+    .author-role {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+    }
+
+    .testimonial-container {
+    position: relative;
+    height: 350px;
+    }
+
+    .testimonial-item {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 1s ease;
+    }
+
+    .testimonial-item.active {
+    opacity: 1;
+    }
+
+    /* Teachers Section */
+    .teachers-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    }
+
+    .teachers-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 2rem;
+    }
+
+    .teacher-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .teacher-card h3 {
     font-size: 1.5rem;
     font-weight: 600;
     color: #1f2937;
+    }
+
+    .teacher-card p {
+    color: #6b7280;
+    margin: 0.5rem 0;
     }
 
     .no-results {
@@ -313,173 +377,314 @@
     text-align: center;
     }
 
-    /* Styling tabel */
-    .table-container {
-    overflow-x: auto;
+    @media (max-width: 768px) {
+    .hero-section h1 {
+      font-size: 2rem;
     }
 
-    .results-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-    color: #1f2937;
+    .search-row {
+      flex-direction: column;
     }
 
-    .results-table th,
-    .results-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+    .search-select {
+      min-width: 100%;
     }
 
-    .results-table th {
-    background: rgba(59, 130, 246, 0.1);
-    font-weight: 600;
-    color: #2563eb;
+    .hero-section button,
+    .hero-section a.reset-button,
+    .teacher-card a.profile-button {
+      margin-top: 1rem;
+      width: 100%;
     }
 
-    .results-table tr:hover {
-    background: rgba(59, 130, 246, 0.05);
-    transition: background 0.2s ease;
+    .hero-section::before,
+    .hero-section::after,
+    .hero-section .bg-circle-1,
+    .hero-section .bg-circle-2,
+    .hero-section .bg-circle-3 {
+      width: 200px;
+      height: 200px;
     }
 
-    .table-button {
-    display: inline-block;
-    padding: 8px 16px;
-    background: #2563eb;
-    color: #ffffff;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    .cta-container::before {
+      width: 120px;
+      height: 120px;
+      top: -60px;
+      right: 10%;
     }
 
-    .table-button:hover {
-    background: #1e40af;
-    transform: scale(1.05);
+    .cta-box {
+      max-width: 200px;
+      padding: 1rem;
+      bottom: 15px;
+      right: 15px;
     }
 
-    .pagination {
-    margin-top: 24px;
-    text-align: center;
+    .cta-text {
+      font-size: 1rem;
     }
 
-    .pagination a,
-    .pagination span {
-    display: inline-block;
-    padding: 8px 12px;
-    margin: 0 4px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    color: #2563eb;
-    text-decoration: none;
-    transition: all 0.2s ease;
+    .testimonial-quote {
+      font-size: 2rem;
+      min-height: 220px;
+      padding-right: 0;
     }
 
-    .pagination a:hover {
-    background: rgba(59, 130, 246, 0.1);
-    transform: scale(1.05);
+    .section-title h2 {
+      font-size: 2.2rem;
     }
 
-    .pagination .current {
-    background: #2563eb;
-    color: #ffffff;
-    }
-
-    /* Animasi */
-    @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    }
-
-    @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
+    .author-image {
+      width: 60px;
+      height: 60px;
     }
     }
   </style>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+    <div class="bg-circle-3"></div>
+    <div class="text-center">
+    <h1>Temukan Guru Ahli IT kalian</h1>
+    <form method="GET" action="{{ route('student.teachers.search') }}" class="search-container">
+      <div class="search-row">
+      <select name="subject_id" id="subject_id" class="search-select">
+        <option value="">Semua Mata Pelajaran</option>
+        @foreach($subjects as $subject)
+      <option value="{{ $subject->id }}" {{ $request->subject_id == $subject->id ? 'selected' : '' }}>
+      {{ $subject->name }}
+      </option>
+      @endforeach
+      </select>
+      <select id="province_id" name="province_id" class="search-select">
+        <option value="">Pilih Provinsi</option>
+        @foreach($provinces as $province)
+      <option value="{{ $province->id }}" {{ $request->province_id == $province->id ? 'selected' : '' }}>
+      {{ $province->name }}
+      </option>
+      @endforeach
+      </select>
+      <select id="regency_id" name="regency_id" class="search-select" disabled>
+        <option value="">Pilih Kabupaten</option>
+      </select>
+      </div>
+      <div class="search-row">
+      <select id="district_id" name="district_id" class="search-select" disabled>
+        <option value="">Pilih Kecamatan</option>
+      </select>
+      <select id="village_id" name="village_id" class="search-select" disabled>
+        <option value="">Pilih Desa</option>
+      </select>
+      </div>
+      <div class="form-actions">
+      <button type="submit">Cari</button>
+      <a href="{{ route('student.teachers.search') }}" class="reset-button">Reset</a>
+      </div>
+    </form>
+    </div>
+  </section>
+
+  <!-- Teachers Section -->
+  <section class="teachers-section">
+    <h2>Guru Terbaru</h2>
+    @if($teachers->isEmpty())
+    <p class="no-results">Tidak ada guru yang ditemukan.</p>
+    @else
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+    @foreach($teachers as $teacher)
+    <div class="teacher-card">
+      <h3>{{ $teacher->user->name }}</h3>
+      <p>Mata Pelajaran: {{ $teacher->subject->name ?? '-' }}</p>
+      <p>Lokasi:
+      {{ $teacher->province->name ?? '-' }},
+      {{ $teacher->regency->name ?? '-' }},
+      {{ $teacher->district->name ?? '-' }},
+      {{ $teacher->village->name ?? '-' }}
+      </p>
+      <p>Telepon: {{ $teacher->no_telepon ?? '-' }}</p>
+      <a href="{{ route('student.teachers.show', $teacher->id) }}" class="profile-button">Lihat Profil</a>
+    </div>
+    @endforeach
+    </div>
+    <div class="pagination" style="margin-top: 2rem;">
+    {{ $teachers->withQueryString()->links() }}
+    </div>
+    @endif
+  </section>
+
+  <!-- CTA Section -->
+  <div class="cta-wrapper">
+    <div class="cta-container">
+    <div class="image-box">
+      <img
+      src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+      alt="Guru mengajar">
+      <div class="cta-box">
+      <div class="cta-text">Kamu juga bisa daftar menjadi guru</div>
+      <a href="/login" class="detail-button">Lihat Detail</a>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Testimonial Section -->
+  <div class="testimonial-wrapper">
+    <div class="testimonial-section">
+    <div class="section-title">
+      <h2>Apa Kata Mereka?</h2>
+    </div>
+    <div class="testimonial-container">
+      @php
+    $testimonials = [
+      [
+      'quote' => 'Guru di sini sangat profesional, metode pengajarannya mudah dipahami dan sangat membantu perkembangan saya!',
+      'name' => 'Dewi Lestari',
+      'role' => 'Pelajar Universitas Indonesia',
+      'image' => 'https://randomuser.me/api/portraits/women/32.jpg',
+      ],
+      [
+      'quote' => 'Dalam 2 bulan saja, saya sudah bisa membuat aplikasi Android pertama saya berkat bimbingan guru di sini.',
+      'name' => 'Budi Setiawan',
+      'role' => 'Pelajar SMK Negeri 2 Jakarta',
+      'image' => 'https://randomuser.me/api/portraits/men/45.jpg',
+      ],
+      [
+      'quote' => 'Saya tidak pernah menyangka belajar pemrograman bisa semenarik ini. Guru-gurunya membuat konsep sulit menjadi mudah!',
+      'name' => 'Anita Rahayu',
+      'role' => 'Mahasiswa ITB',
+      'image' => 'https://randomuser.me/api/portraits/women/68.jpg',
+      ],
+    ];
+    @endphp
+
+      @foreach($testimonials as $index => $testimonial)
+      <div class="testimonial-item {{ $index === 0 ? 'active' : '' }}">
+      <div class="testimonial-quote">
+      "{{ $testimonial['quote'] }}"
+      </div>
+      <div class="testimonial-author">
+      <div class="author-info">
+      <div class="author-name">{{ $testimonial['name'] }}</div>
+      <div class="author-role">{{ $testimonial['role'] }}</div>
+      </div>
+      <img src="{{ $testimonial['image'] }}" alt="{{ $testimonial['name'] }}" class="author-image">
+      </div>
+      </div>
+    @endforeach
+    </div>
+    </div>
+  </div>
 @endsection
 
 @section('scripts')
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-    function fetchOptions(url, selectId, selectedId = null) {
-      fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const select = document.getElementById(selectId);
-        select.innerHTML = '<option value=""> Pilih </option>';
-        data.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.text = item.name;
-        if (selectedId && selectedId == item.id) option.selected = true;
-        select.appendChild(option);
-        });
-      });
-    }
-
+    // Cascading dropdowns
     const province = document.getElementById('province_id');
     const regency = document.getElementById('regency_id');
     const district = document.getElementById('district_id');
     const village = document.getElementById('village_id');
 
-    province.addEventListener('change', function () {
-      if (this.value) {
-      fetchOptions(`/api/regencies/${this.value}`, 'regency_id');
-      district.innerHTML = '<option value=""> Pilih Kecamatan </option>';
-      village.innerHTML = '<option value=""> Pilih Desa </option>';
+    function fetchOptions(url, target, placeholder = 'Pilih') {
+      target.innerHTML = `<option value="">-- Loading ${placeholder} --</option>`;
+      target.disabled = true;
+
+      fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to fetch ${placeholder}: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        target.innerHTML = `<option value="">${placeholder}</option>`;
+        if (data.length === 0) {
+        target.innerHTML = `<option value="">Tidak ada ${placeholder.toLowerCase()} tersedia</option>`;
+        } else {
+        data.forEach(item => {
+          target.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+        });
+        }
+        target.disabled = false;
+      })
+      .catch(err => {
+        console.error(`Error fetching ${placeholder}:`, err);
+        target.innerHTML = `<option value="">Gagal memuat ${placeholder}</option>`;
+        target.disabled = true;
+      });
+    }
+
+    province.addEventListener('change', () => {
+      if (province.value) {
+      fetchOptions(`/api/regencies/${province.value}`, regency, 'Pilih Kabupaten');
+      district.innerHTML = '<option value="">Pilih Kecamatan</option>';
+      district.disabled = true;
+      village.innerHTML = '<option value="">Pilih Desa</option>';
+      village.disabled = true;
       } else {
-      regency.innerHTML = '<option value=""> Pilih Kabupaten </option>';
-      district.innerHTML = '<option value=""> Pilih Kecamatan </option>';
-      village.innerHTML = '<option value=""> Pilih Desa </option>';
+      regency.innerHTML = '<option value="">Pilih Kabupaten</option>';
+      regency.disabled = true;
+      district.innerHTML = '<option value="">Pilih Kecamatan</option>';
+      district.disabled = true;
+      village.innerHTML = '<option value="">Pilih Desa</option>';
+      village.disabled = true;
       }
     });
 
-    regency.addEventListener('change', function () {
-      if (this.value) {
-      fetchOptions(`/api/districts/${this.value}`, 'district_id');
-      village.innerHTML = '<option value=""> Pilih Desa </option>';
+    regency.addEventListener('change', () => {
+      if (regency.value) {
+      fetchOptions(`/api/districts/${regency.value}`, district, 'Pilih Kecamatan');
+      village.innerHTML = '<option value="">Pilih Desa</option>';
+      village.disabled = true;
       } else {
-      district.innerHTML = '<option value=""> Pilih Kecamatan </option>';
-      village.innerHTML = '<option value=""> Pilih Desa </option>';
+      district.innerHTML = '<option value="">Pilih Kecamatan</option>';
+      district.disabled = true;
+      village.innerHTML = '<option value="">Pilih Desa</option>';
+      village.disabled = true;
       }
     });
 
-    district.addEventListener('change', function () {
-      if (this.value) {
-      fetchOptions(`/api/villages/${this.value}`, 'village_id');
+    district.addEventListener('change', () => {
+      if (district.value) {
+      fetchOptions(`/api/villages/${district.value}`, village, 'Pilih Desa');
       } else {
-      village.innerHTML = '<option value=""> Pilih Desa </option>';
+      village.innerHTML = '<option value="">Pilih Desa</option>';
+      village.disabled = true;
       }
     });
 
-    // Inisialisasi dropdown dengan input lama
-    @if($request->province_id)
-    fetchOptions('/api/regencies/{{ $request->province_id }}', 'regency_id', '{{ $request->regency_id }}');
+    // Initialize dropdowns if old input exists
+    @if (request()->has('province_id'))
+    console.log('Initializing regency for province_id: {{ request()->province_id }}');
+    fetchOptions('/api/regencies/{{ request()->province_id }}', regency, 'Pilih Kabupaten');
+    setTimeout(() => {
+      regency.value = '{{ request()->regency_id ?? '' }}';
+      @if (request()->has('regency_id'))
+      console.log('Initializing district for regency_id: {{ request()->regency_id }}');
+      fetchOptions('/api/districts/{{ request()->regency_id }}', district, 'Pilih Kecamatan');
+      setTimeout(() => {
+      district.value = '{{ request()->district_id ?? '' }}';
+      @if (request()->has('district_id'))
+      console.log('Initializing village for district_id: {{ request()->district_id }}');
+      fetchOptions('/api/villages/{{ request()->district_id }}', village, 'Pilih Desa');
+      setTimeout(() => {
+      village.value = '{{ request()->village_id ?? '' }}';
+      }, 100);
     @endif
-    @if($request->regency_id)
-    fetchOptions('/api/districts/{{ $request->regency_id }}', 'district_id', '{{ $request->district_id }}');
+      }, 100);
     @endif
-    @if($request->district_id)
-    fetchOptions('/api/villages/{{ $request->district_id }}', 'village_id', '{{ $request->village_id }}');
+      }, 100);
     @endif
+
+      // Testimonial carousel logic
+      const items = document.querySelectorAll('.testimonial-item');
+    let current = 0;
+
+    setInterval(() => {
+      items[current].classList.remove('active');
+      current = (current + 1) % items.length;
+      items[current].classList.add('active');
+    }, 5000);
     });
   </script>
 @endsection
