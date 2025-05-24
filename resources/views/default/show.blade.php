@@ -198,25 +198,25 @@
             </ul>
         @endif
 
-        <form method="POST" action="{{ route('student.bookings.store') }}" id="booking-form">
-            @csrf
-            <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
-            <div class="form-group">
-                <label for="schedule_id">Select Schedule</label>
-                <select name="schedule_id" id="schedule_id" class="form-control" required>
-                    <option value="">Select a schedule</option>
-                    @foreach($teacher->schedules as $schedule)
-                        <option value="{{ $schedule->id }}">
-                            {{ ucfirst($schedule->day) }} | {{ $schedule->clock }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="button-group">
-                <a href="/" class="btn-back">Back</a>
-                <button type="submit" class="btn btn-primary" id="book-now">Book Now</button>
-            </div>
-        </form>
+        <!-- <form method="POST" action="{{ route('student.bookings.store') }}" id="booking-form">
+                    @csrf
+                    <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
+                    <div class="form-group">
+                        <label for="schedule_id">Select Schedule</label>
+                        <select name="schedule_id" id="schedule_id" class="form-control" required>
+                            <option value="">Select a schedule</option>
+                            @foreach($teacher->schedules as $schedule)
+                                <option value="{{ $schedule->id }}">
+                                    {{ ucfirst($schedule->day) }} | {{ $schedule->clock }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div> -->
+        <div class="button-group">
+            <a href="/" class="btn-back">Back</a>
+            <!-- <button type="submit" class="btn btn-primary" id="book-now">Book Now</button> -->
+        </div>
+        <!-- </form> -->
     </div>
 
     <script>

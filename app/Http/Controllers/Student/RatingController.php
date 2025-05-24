@@ -29,6 +29,10 @@ class RatingController extends Controller
             'comment' => 'nullable|string',
         ]);
 
+        $booking = Booking::findOrFail($request->booking_id);
+        $booking->rating = true;
+        $booking->save();
+
         Rating::create([
             'teacher_id' => $request->teacher_id,
             'student_id' => auth()->user()->student->id,
@@ -54,7 +58,7 @@ class RatingController extends Controller
             'average_ratings' => round($average),
         ]);
 
-        return redirect()->back()->with('success', 'Rating submitted successfully!');
+        return redirect('/student/bookings')->with('success', 'Rating submitted successfully!');
     }
 
     public function myRatings()

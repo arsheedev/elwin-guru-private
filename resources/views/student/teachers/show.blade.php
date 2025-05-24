@@ -1,293 +1,238 @@
 @extends('layouts.students')
 
+@section('title', 'Teacher Profile - ' . $teacher->user->name)
+
 @section('content')
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
 
-    .rating-container {
-    max-width: 600px;
+    .container {
+    max-width: 800px;
     margin: 2rem auto;
+    padding: 2rem;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    font-family: 'Poppins', sans-serif;
     }
 
-    .rating-container h2 {
+    h2 {
     font-size: 2rem;
     font-weight: 700;
     color: #1f2937;
-    text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     }
 
-    .rating-form {
+    .rating {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    }
+
+    .rating i {
+    color: #f59e0b;
+    /* Star color */
+    margin-right: 0.5rem;
+    }
+
+    p {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 0.75rem;
+    }
+
+    p strong {
+    color: #1f2937;
+    }
+
+    hr {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 1.5rem 0;
+    }
+
+    h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    }
+
+    .list-group-item {
+    font-size: 1rem;
+    color: #4b5563;
+    border-color: #e5e7eb;
+    }
+
+    .badge {
+    font-size: 0.85rem;
+    padding: 0.5em 0.75em;
     }
 
     .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    margin-bottom: 1.5rem;
     }
 
-    .form-group label {
+    .form-control {
     font-size: 1rem;
-    font-weight: 600;
-    color: #1f2937;
-    }
-
-    .star-rating {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    }
-
-    .star-svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    fill: #d1d5db;
-    transition: fill 0.2s ease;
-    }
-
-    .star-rating .star-svg.filled,
-    .star-rating .star-svg:hover,
-    .star-rating .star-svg:hover~.star-svg {
-    fill: #f59e0b;
-    }
-
-    .form-group textarea {
-    width: 100%;
-    min-height: 100px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
     padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    color: #1f2937;
-    resize: vertical;
-    transition: border-color 0.2s ease;
+    width: 100%;
     }
 
-    .form-group textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .submit-button {
-    background-color: #3b82f6;
-    color: #ffffff;
-    padding: 0.75rem 2rem;
-    border-radius: 2rem;
+    .btn-primary {
+    background: linear-gradient(to right, #3b82f6, #1e40af);
     border: none;
     font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.1s;
+    color: #ffffff;
+    /* Explicit white text */
     }
 
-    .submit-button:hover {
-    background-color: #2563eb;
+    .btn-primary:hover {
+    background: linear-gradient(to right, #2563eb, #1e3a8a);
+    transform: translateY(-1px);
     }
 
-    @media (max-width: 576px) {
-    .rating-container {
+    .btn-back {
+    background: #6b7280;
+    color: #ffffff;
+    /* Explicit white text */
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 1rem;
+    }
+
+    .btn-back:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+    }
+
+    .button-group {
+    display: flex;
+    gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+    .container {
       margin: 1rem;
       padding: 1.5rem;
     }
 
-    .rating-container h2 {
-      font-size: 1.5rem;
+    h2 {
+      font-size: 1.75rem;
     }
 
-    .star-rating {
-      font-size: 1.2rem;
+    h4 {
+      font-size: 1.25rem;
     }
 
-    .star-svg {
-      width: 1.2rem;
-      height: 1.2rem;
-    }
-
-    .form-group label {
+    .rating {
       font-size: 0.9rem;
     }
 
-    .submit-button {
+    .form-control,
+    .btn-primary,
+    .btn-back {
+      font-size: 0.9rem;
+    }
+
+    .button-group {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .btn-back,
+    .btn-primary {
       width: 100%;
+      margin-right: 0;
     }
     }
   </style>
 
-  <div class="rating-container">
-    <h2>Rate Teacher: {{ $booking->teacher->user->name }}</h2>
+  <div class="container">
+    <h2>{{ $teacher->user->name }}</h2>
+    <div class="rating">
+    <i class="fas fa-star"></i>
+    <span>Rating:
+      {{ $teacher->average_rating ? number_format($teacher->average_rating, 1) . '/5' : 'No rating yet' }}</span>
+    </div>
 
-    <form action="{{ route('student.ratings.store') }}" method="POST" class="rating-form">
+    <p><strong>Subject:</strong> {{ $teacher->subject->name ?? '-' }}</p>
+    <p><strong>Phone:</strong> {{ $teacher->no_telepon ?? '-' }}</p>
+
+    <p>
+    <strong>Location:</strong>
+    {{ $teacher->village->name ?? '-' }},
+    {{ $teacher->district->name ?? '-' }},
+    {{ $teacher->regency->name ?? '-' }},
+    {{ $teacher->province->name ?? '-' }}
+    </p>
+
+    <hr>
+
+    <h4>Available Schedules</h4>
+    @if($teacher->schedules->isEmpty())
+    <p>No available schedules.</p>
+    @else
+    <ul class="list-group mb-3">
+    @foreach($teacher->schedules as $schedule)
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>{{ ucfirst($schedule->day) }} at {{ $schedule->clock }}</span>
+      <span class="badge bg-success">Available</span>
+    </li>
+    @endforeach
+    </ul>
+    @endif
+
+    <form method="POST" action="{{ route('student.bookings.store') }}" id="booking-form">
     @csrf
-    <input type="hidden" name="teacher_id" value="{{ $booking->teacher_id }}">
-    <input type="hidden" name="booking_id" value="{{ $booking->id }}">
-
+    <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
     <div class="form-group">
-      <label for="quality_teaching">Quality Teaching</label>
-      <div class="star-rating" data-input="quality_teaching">
-      <svg class="star-svg" data-value="1" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="2" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="3" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="4" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="5" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      </div>
-      <input type="hidden" name="quality_teaching" id="quality_teaching" value="0" required>
+      <label for="schedule_id">Select Schedule</label>
+      <select name="schedule_id" id="schedule_id" class="form-control" required>
+      <option value="">Select a schedule</option>
+      @foreach($teacher->schedules as $schedule)
+      <option value="{{ $schedule->id }}">
+      {{ ucfirst($schedule->day) }} | {{ $schedule->clock }}
+      </option>
+    @endforeach
+      </select>
     </div>
-
-    <div class="form-group">
-      <label for="communication">Communication</label>
-      <div class="star-rating" data-input="communication">
-      <svg class="star-svg" data-value="1" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="2" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="3" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="4" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="5" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      </div>
-      <input type="hidden" name="communication" id="communication" value="0" required>
+    <div class="button-group">
+      <a href="/student" class="btn-back">Back</a>
+      <button type="submit" class="btn btn-primary" id="book-now">Book Now</button>
     </div>
-
-    <div class="form-group">
-      <label for="discipline">Discipline</label>
-      <div class="star-rating" data-input="discipline">
-      <svg class="star-svg" data-value="1" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="2" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="3" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="4" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="5" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      </div>
-      <input type="hidden" name="discipline" id="discipline" value="0" required>
-    </div>
-
-    <div class="form-group">
-      <label for="teaching_method">Teaching Method</label>
-      <div class="star-rating" data-input="teaching_method">
-      <svg class="star-svg" data-value="1" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="2" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="3" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="4" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="5" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      </div>
-      <input type="hidden" name="teaching_method" id="teaching_method" value="0" required>
-    </div>
-
-    <div class="form-group">
-      <label for="teaching_result">Teaching Result</label>
-      <div class="star-rating" data-input="teaching_result">
-      <svg class="star-svg" data-value="1" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="2" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="3" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="4" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      <svg class="star-svg" data-value="5" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-      </div>
-      <input type="hidden" name="teaching_result" id="teaching_result" value="0" required>
-    </div>
-
-    <div class="form-group">
-      <label for="comment">Comment (Optional)</label>
-      <textarea name="comment" id="comment" placeholder="Share your feedback about the teacher..."></textarea>
-    </div>
-    <button type="submit" class="submit-button">Submit Rating</button>
     </form>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const starRatings = document.querySelectorAll('.star-rating');
+    const bookNowButton = document.getElementById('book-now');
+    const bookingForm = document.getElementById('booking-form');
 
-    starRatings.forEach(rating => {
-      const inputId = rating.getAttribute('data-input');
-      const input = document.getElementById(inputId);
-      const stars = rating.querySelectorAll('.star-svg');
+    // Check if user is authenticated
+    const isAuthenticated = @json(auth()->check());
 
-      stars.forEach(star => {
-      star.addEventListener('click', () => {
-        const value = parseInt(star.getAttribute('data-value'));
-        input.value = value;
-
-        stars.forEach(s => {
-        const sValue = parseInt(s.getAttribute('data-value'));
-        s.classList.toggle('filled', sValue <= value);
-        });
-      });
-
-      star.addEventListener('mouseover', () => {
-        const value = parseInt(star.getAttribute('data-value'));
-        stars.forEach(s => {
-        const sValue = parseInt(s.getAttribute('data-value'));
-        s.classList.toggle('filled', sValue <= value);
-        });
-      });
-
-      star.addEventListener('mouseout', () => {
-        const currentValue = parseInt(input.value) || 0;
-        stars.forEach(s => {
-        const sValue = parseInt(s.getAttribute('data-value'));
-        s.classList.toggle('filled', sValue <= currentValue);
-        });
-      });
-      });
+    bookNowButton.addEventListener('click', function (event) {
+      if (!isAuthenticated) {
+      event.preventDefault(); // Prevent form submission
+      window.location.href = '/login'; // Redirect to login
+      }
+      // If authenticated, form will submit normally
     });
     });
   </script>
