@@ -51,6 +51,7 @@ class ProfileController extends Controller
             'district_id' => 'required',
             'village_id' => 'required',
             'subject_id' => 'required',
+            'price' => 'required|integer',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -81,6 +82,7 @@ class ProfileController extends Controller
         $teacher->district_id = $request->district_id;
         $teacher->village_id = $request->village_id;
         $teacher->subject_id = $request->subject_id;
+        $teacher->price = $request->price;
 
         $teacher->save();
 

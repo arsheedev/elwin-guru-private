@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['pending', 'accepted', 'completed'])->default('pending');
+            $table->enum('status', ['canceled', 'pending', 'accepted', 'completed'])->default('pending');
             $table->boolean('rating')->default(false);
             $table->timestamps();
         });

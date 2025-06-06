@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('no_telepon');
             $table->string('profile_image');
-            $table->integer('average_ratings')->default(0);
+            $table->integer('price')->default(0);
+            $table->float('average_ratings')->default(0);
             $table->char('province_id', 2);
             $table->char('regency_id', 4);
             $table->char('district_id', 6);
