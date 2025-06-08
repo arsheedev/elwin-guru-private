@@ -1,14 +1,13 @@
 @extends('layouts.teacher')
 
 @section('content')
-
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="id">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Teacher Profile</title>
+        <title>Profil Guru</title>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <style>
             body {
@@ -132,7 +131,7 @@
         <div class="profile-container">
             <div class="profile-image-container">
                 <img src="{{ $teacher->profile_image ? asset('storage/' . $teacher->profile_image) : 'https://via.placeholder.com/300' }}"
-                    alt="Profile Image" class="profile-image">
+                    alt="Gambar Profil" class="profile-image">
             </div>
             <div class="profile-details">
                 <div class="name-rating">
@@ -156,36 +155,40 @@
                     </div>
                 </div>
                 <div class="role-container">
-                    <span class="role">{{ $user->role }}</span>
-                    <form action="{{ route('logout') }}" method="GET">
+                    <span class="role">{{ $user->role === 'teacher' ? 'Guru' : $user->role }}</span>
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="logout-button">Logout</button>
+                        <button type="submit" class="logout-button">Keluar</button>
                     </form>
                 </div>
                 <div class="info-grid">
                     <span class="info-label">Email:</span>
                     <span class="info-value">{{ $user->email }}</span>
 
-                    <span class="info-label">Phone Number:</span>
+                    <span class="info-label">Nomor Telepon:</span>
                     <span class="info-value">{{ $teacher->no_telepon }}</span>
 
-                    <span class="info-label">Subject:</span>
-                    <span class="info-value">{{ $teacher->subject ? $teacher->subject->name : 'Not specified' }}</span>
+                    <span class="info-label">Mata Pelajaran:</span>
+                    <span class="info-value">{{ $teacher->subject ? $teacher->subject->name : 'Tidak ditentukan' }}</span>
 
-                    <span class="info-label">Province:</span>
-                    <span class="info-value">{{ $teacher->province ? $teacher->province->name : 'Not specified' }}</span>
+                    <span class="info-label">Harga per Sesi:</span>
+                    <span
+                        class="info-value">{{ $teacher->price ? 'Rp ' . number_format($teacher->price, 0, ',', '.') : 'Tidak ditentukan' }}</span>
 
-                    <span class="info-label">Regency:</span>
-                    <span class="info-value">{{ $teacher->regency ? $teacher->regency->name : 'Not specified' }}</span>
+                    <span class="info-label">Provinsi:</span>
+                    <span class="info-value">{{ $teacher->province ? $teacher->province->name : 'Tidak ditentukan' }}</span>
 
-                    <span class="info-label">District:</span>
-                    <span class="info-value">{{ $teacher->district ? $teacher->district->name : 'Not specified' }}</span>
+                    <span class="info-label">Kabupaten/Kota:</span>
+                    <span class="info-value">{{ $teacher->regency ? $teacher->regency->name : 'Tidak ditentukan' }}</span>
 
-                    <span class="info-label">Village:</span>
-                    <span class="info-value">{{ $teacher->village ? $teacher->village->name : 'Not specified' }}</span>
+                    <span class="info-label">Kecamatan:</span>
+                    <span class="info-value">{{ $teacher->district ? $teacher->district->name : 'Tidak ditentukan' }}</span>
+
+                    <span class="info-label">Desa/Kelurahan:</span>
+                    <span class="info-value">{{ $teacher->village ? $teacher->village->name : 'Tidak ditentukan' }}</span>
                 </div>
                 <div class="flex justify-end">
-                    <a href="{{ route('teacher.profile.edit') }}" class="edit-button">Edit Profile</a>
+                    <a href="{{ route('teacher.profile.edit') }}" class="edit-button">Edit Profil</a>
                 </div>
             </div>
         </div>

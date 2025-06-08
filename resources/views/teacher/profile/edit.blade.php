@@ -130,6 +130,16 @@
       <span class="error-message">{{ $message }}</span>
       @enderror
       </div>
+
+      <!-- Harga (per sesi) -->
+      <div class="form-group">
+        <label for="price" class="form-label">Harga (per sesi)</label>
+        <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $teacher->price) }}"
+        placeholder="Masukkan harga per sesi (Rp)" min="0" step="500" required>
+        @error('price')
+      <span class="error-message">{{ $message }}</span>
+      @enderror
+      </div>
       </div>
 
       <div class="form-actions">
@@ -381,7 +391,7 @@
       fetch(url)
       .then(res => res.json())
       .then(data => {
-        selectElement.innerHTML = <option value="">-- ${placeholderText} --</option>;
+        selectElement.innerHTML = `<option value="">-- ${placeholderText} --</option>`;
         data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;

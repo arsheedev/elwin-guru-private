@@ -4,19 +4,19 @@
   <div class="ratings-container">
     <div class="container">
     <div class="ratings-header">
-      <h2 class="ratings-title">My Ratings</h2>
-      <p class="ratings-subtitle">See what students say about your teaching</p>
+      <h2 class="ratings-title">Penilaian Saya</h2>
+      <p class="ratings-subtitle">Lihat apa yang dikatakan siswa tentang pengajaran Anda</p>
     </div>
 
     @if($ratings->isEmpty())
     <div class="no-ratings">
-      <p>No ratings yet. Keep teaching to earn feedback!</p>
+      <p>Belum ada penilaian. Teruskan mengajar untuk mendapatkan umpan balik!</p>
     </div>
     @else
-      <!-- Summary Card -->
+      <!-- Kartu Ringkasan -->
       <div class="summary-card">
       <div class="summary-header">
-      <h3 class="summary-title">Overall Rating</h3>
+      <h3 class="summary-title">Penilaian Keseluruhan</h3>
       <div class="overall-rating">
         <span class="overall-score">
         {{ number_format($ratings->avg(function ($rating) {
@@ -33,41 +33,41 @@
         </svg>
       @endfor
         </div>
-        <span class="total-reviews">Based on {{ $ratings->count() }}
-        {{ Str::plural('review', $ratings->count()) }}</span>
+        <span class="total-reviews">Berdasarkan {{ $ratings->count() }}
+        {{ Str::plural('penilaian', $ratings->count()) }}</span>
       </div>
       </div>
       <div class="summary-metrics">
       <div class="metric">
-        <span class="metric-label">Teaching Quality</span>
+        <span class="metric-label">Kualitas Pengajaran</span>
         <div class="progress-bar">
         <div class="progress" style="width: {{ ($ratings->avg('quality_teaching') / 5) * 100 }}%"></div>
         </div>
         <span class="metric-score">{{ number_format($ratings->avg('quality_teaching'), 1) }}</span>
       </div>
       <div class="metric">
-        <span class="metric-label">Communication</span>
+        <span class="metric-label">Komunikasi</span>
         <div class="progress-bar">
         <div class="progress" style="width: {{ ($ratings->avg('communication') / 5) * 100 }}%"></div>
         </div>
         <span class="metric-score">{{ number_format($ratings->avg('communication'), 1) }}</span>
       </div>
       <div class="metric">
-        <span class="metric-label">Discipline</span>
+        <span class="metric-label">Disiplin</span>
         <div class="progress-bar">
         <div class="progress" style="width: {{ ($ratings->avg('discipline') / 5) * 100 }}%"></div>
         </div>
         <span class="metric-score">{{ number_format($ratings->avg('discipline'), 1) }}</span>
       </div>
       <div class="metric">
-        <span class="metric-label">Teaching Method</span>
+        <span class="metric-label">Metode Pengajaran</span>
         <div class="progress-bar">
         <div class="progress" style="width: {{ ($ratings->avg('teaching_method') / 5) * 100 }}%"></div>
         </div>
         <span class="metric-score">{{ number_format($ratings->avg('teaching_method'), 1) }}</span>
       </div>
       <div class="metric">
-        <span class="metric-label">Teaching Result</span>
+        <span class="metric-label">Hasil Pengajaran</span>
         <div class="progress-bar">
         <div class="progress" style="width: {{ ($ratings->avg('teaching_result') / 5) * 100 }}%"></div>
         </div>
@@ -76,14 +76,14 @@
       </div>
       </div>
 
-      <!-- Individual Ratings -->
+      <!-- Penilaian Individu -->
       <div class="ratings-list">
       @foreach($ratings as $rating)
       <div class="rating-card">
       <div class="rating-header">
       <div class="student-info">
-      <span class="student-name">{{ $rating->student->user->name ?? 'Anonymous' }}</span>
-      <span class="rating-date">{{ $rating->created_at->format('M d, Y') }}</span>
+      <span class="student-name">{{ $rating->student->user->name ?? 'Anonim' }}</span>
+      <span class="rating-date">{{ $rating->created_at->format('d M Y') }}</span>
       </div>
       <div class="rating-average">
       <span class="average-score">
@@ -102,9 +102,10 @@
       </div>
       </div>
       </div>
+
       <div class="rating-metrics">
       <div class="metric">
-      <span class="metric-label">Teaching Quality</span>
+      <span class="metric-label">Kualitas Pengajaran</span>
       <div class="stars">
         @for($i = 1; $i <= 5; $i++)
       <svg class="star {{ $i <= $rating->quality_teaching ? 'filled' : '' }}" xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +117,7 @@
       </div>
       </div>
       <div class="metric">
-      <span class="metric-label">Communication</span>
+      <span class="metric-label">Komunikasi</span>
       <div class="stars">
         @for($i = 1; $i <= 5; $i++)
       <svg class="star {{ $i <= $rating->communication ? 'filled' : '' }}" xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +129,7 @@
       </div>
       </div>
       <div class="metric">
-      <span class="metric-label">Discipline</span>
+      <span class="metric-label">Disiplin</span>
       <div class="stars">
         @for($i = 1; $i <= 5; $i++)
       <svg class="star {{ $i <= $rating->discipline ? 'filled' : '' }}" xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +141,7 @@
       </div>
       </div>
       <div class="metric">
-      <span class="metric-label">Teaching Method</span>
+      <span class="metric-label">Metode Pengajaran</span>
       <div class="stars">
         @for($i = 1; $i <= 5; $i++)
       <svg class="star {{ $i <= $rating->teaching_method ? 'filled' : '' }}" xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +153,7 @@
       </div>
       </div>
       <div class="metric">
-      <span class="metric-label">Teaching Result</span>
+      <span class="metric-label">Hasil Pengajaran</span>
       <div class="stars">
         @for($i = 1; $i <= 5; $i++)
       <svg class="star {{ $i <= $rating->teaching_result ? 'filled' : '' }}" xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +166,7 @@
       </div>
       </div>
       <div class="rating-comment">
-      <p>{{ $rating->comment ?: 'No comment provided.' }}</p>
+      <p>{{ $rating->comment ?: 'Tidak ada komentar.' }}</p>
       </div>
       </div>
       @endforeach

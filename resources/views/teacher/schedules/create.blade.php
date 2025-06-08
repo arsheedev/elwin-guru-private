@@ -1,6 +1,6 @@
 @extends('layouts.teacher')
 
-@section('title', 'Create Schedule')
+@section('title', 'Buat Jadwal')
 
 @section('content')
   <style>
@@ -139,7 +139,7 @@
   </style>
 
   <div class="container-create">
-    <h2>Create Schedule</h2>
+    <h2>Buat Jadwal</h2>
 
     @if($errors->any())
     <div class="alert alert-danger">
@@ -155,24 +155,33 @@
     @csrf
 
     <div class="form-group">
-      <label for="day" class="form-label">Day</label>
+      <label for="day" class="form-label">Hari</label>
       <select name="day" id="day" class="form-control" required>
       @foreach(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as $day)
-      <option value="{{ $day }}" {{ old('day') === $day ? 'selected' : '' }}>
-      {{ ucfirst($day) }}
-      </option>
+        <option value="{{ $day }}" {{ old('day') === $day ? 'selected' : '' }}>
+        {{ match ($day) {
+      'sunday' => 'Minggu',
+      'monday' => 'Senin',
+      'tuesday' => 'Selasa',
+      'wednesday' => 'Rabu',
+      'thursday' => 'Kamis',
+      'friday' => 'Jumat',
+      'saturday' => 'Sabtu',
+      default => ucfirst($day)
+      } }}
+        </option>
     @endforeach
       </select>
     </div>
 
     <div class="form-group">
-      <label for="clock" class="form-label">Time</label>
+      <label for="clock" class="form-label">Waktu</label>
       <input type="time" name="clock" id="clock" class="form-control" value="{{ old('clock') }}" required>
     </div>
 
     <div class="button-group">
-      <a href="{{ route('teacher.schedules.index') }}" class="btn-back">Back</a>
-      <button type="submit" class="btn btn-primary">Create</button>
+      <a href="{{ route('teacher.schedules.index') }}" class="btn-back">Kembali</a>
+      <button type="submit" class="btn btn-primary">Buat</button>
     </div>
     </form>
   </div>

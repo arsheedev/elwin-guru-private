@@ -1,6 +1,6 @@
 @extends('layouts.teacher')
 
-@section('title', 'Edit Schedule')
+@section('title', 'Edit Jadwal')
 
 @section('content')
   <style>
@@ -139,7 +139,7 @@
   </style>
 
   <div class="container-edit">
-    <h2>Edit Schedule</h2>
+    <h2>Edit Jadwal</h2>
 
     @if($errors->any())
     <div class="alert alert-danger">
@@ -156,33 +156,44 @@
     @method('PUT')
 
     <div class="form-group">
-      <label for="day" class="form-label">Day</label>
+      <label for="day" class="form-label">Hari</label>
       <select name="day" id="day" class="form-control" required>
       @foreach(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as $day)
       <option value="{{ $day }}" {{ old('day', $schedule->day) === $day ? 'selected' : '' }}>
-      {{ ucfirst($day) }}
+        @php
+      $dayMap = [
+      'sunday' => 'Minggu',
+      'monday' => 'Senin',
+      'tuesday' => 'Selasa',
+      'wednesday' => 'Rabu',
+      'thursday' => 'Kamis',
+      'friday' => 'Jumat',
+      'saturday' => 'Sabtu'
+      ];
+      echo $dayMap[$day] ?? ucfirst($day);
+      @endphp
       </option>
     @endforeach
       </select>
     </div>
 
     <div class="form-group">
-      <label for="clock" class="form-label">Time</label>
+      <label for="clock" class="form-label">Waktu</label>
       <input type="time" name="clock" id="clock" class="form-control" value="{{ old('clock', $schedule->clock) }}"
       required>
     </div>
 
     <div class="form-group">
-      <label for="is_available" class="form-label">Available</label>
+      <label for="is_available" class="form-label">Tersedia</label>
       <select name="is_available" id="is_available" class="form-control" required>
-      <option value="1" {{ old('is_available', $schedule->is_available) ? 'selected' : '' }}>Yes</option>
-      <option value="0" {{ !old('is_available', $schedule->is_available) ? 'selected' : '' }}>No</option>
+      <option value="1" {{ old('is_available', $schedule->is_available) ? 'selected' : '' }}>Ya</option>
+      <option value="0" {{ !old('is_available', $schedule->is_available) ? 'selected' : '' }}>Tidak</option>
       </select>
     </div>
 
     <div class="button-group">
-      <a href="{{ route('teacher.schedules.index') }}" class="btn-back">Back</a>
-      <button type="submit" class="btn btn-primary">Update</button>
+      <a href="{{ route('teacher.schedules.index') }}" class="btn-back">Kembali</a>
+      <button type="submit" class="btn btn-primary">Perbarui</button>
     </div>
     </form>
   </div>

@@ -183,7 +183,7 @@
     </style>
 
     <div class="container">
-        <h2>Your Bookings</h2>
+        <h2>Pemesanan Anda</h2>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -193,43 +193,66 @@
         @endif
 
         @if($bookings->isEmpty())
-            <p class="no-bookings">No bookings yet.</p>
+            <p class="no-bookings">Belum ada pemesanan.</p>
         @else
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Student</th>
-                        <th>Schedule</th>
+                        <th>Siswa</th>
+                        <th>Jadwal</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($bookings as $booking)
                         <tr>
                             <td>{{ $booking->student->user->name }}</td>
-                            <td>{{ ucfirst($booking->schedule->day) }} at {{ $booking->schedule->clock }}</td>
+                            <td>
+                                @php
+                                    $dayMap = [
+                                        'sunday' => 'Minggu',
+                                        'monday' => 'Senin',
+                                        'tuesday' => 'Selasa',
+                                        'wednesday' => 'Rabu',
+                                        'thursday' => 'Kamis',
+                                        'friday' => 'Jumat',
+                                        'saturday' => 'Sabtu'
+                                    ];
+                                    $day = strtolower($booking->schedule->day);
+                                    $indonesianDay = $dayMap[$day] ?? ucfirst($day);
+                                @endphp
+                                {{ $indonesianDay }} pukul {{ $booking->schedule->clock }}
+                            </td>
                             <td>
                                 <span class="badge badge-{{ $booking->status }}">
-                                    {{ ucfirst($booking->status) }}
+                                    @php
+                                        $statusMap = [
+                                            'pending' => 'Menunggu',
+                                            'accepted' => 'Diterima',
+                                            'completed' => 'Selesai'
+                                        ];
+                                        echo $statusMap[$booking->status] ?? ucfirst($booking->status);
+                                    @endphp
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
                                     @if($booking->status === 'pending')
                                         <form action="{{ route('bookings.accept', $booking) }}" method="POST"
-                                            style="display:inline-block" onsubmit="return confirm('Accept this booking?')">
+                                            style="display:inline-block" onsubmit="return confirm('Terima pemesanan ini?')">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                                            <button type="submit" class="btn btn-primary btn-sm">Terima</button>
                                         </form>
                                     @endif
                                     @if($booking->status === 'accepted')
                                         <form action="{{ route('bookings.complete', $booking) }}" method="POST"
-                                            style="display:inline-block" onsubmit="return confirm('Mark this booking as completed?')">
+                                            style="display:inline-block"
+                                            onsubmit="return confirm('Tandai pemesanan ini sebagai selesai?')">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Selesai</button>
                                         </form>
                                     @endif
                                 </div>

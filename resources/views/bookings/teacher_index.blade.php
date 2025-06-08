@@ -1,6 +1,6 @@
 @extends('layouts.teacher')
 
-@section('title', 'Your Bookings')
+@section('title', 'Pemesanan Anda')
 
 @section('content')
   <style>
@@ -188,7 +188,7 @@
   </style>
 
   <div class="container-bookings">
-    <h2>Your Bookings</h2>
+    <h2>Pemesanan Anda</h2>
 
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -198,45 +198,45 @@
     @endif
 
     @if($bookings->isEmpty())
-    <p class="no-bookings">No bookings found.</p>
+    <p class="no-bookings">Tidak ada pemesanan ditemukan.</p>
     @else
     <table class="table">
     <thead>
       <tr>
-      <th>Student</th>
-      <th>Schedule</th>
+      <th>Siswa</th>
+      <th>Jadwal</th>
       <th>Status</th>
-      <th>Actions</th>
+      <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
       @foreach($bookings as $booking)
       <tr>
       <td>{{ $booking->student->user->name }}</td>
-      <td>{{ ucfirst($booking->schedule->day) }} at {{ $booking->schedule->clock }}</td>
+      <td>{{ ucfirst($booking->schedule->day) }} pukul {{ $booking->schedule->clock }}</td>
       <td>
       <span class="badge badge-{{ $booking->status }}">
-      {{ ucfirst($booking->status) }}
+      {{ ucfirst($booking->status === 'pending' ? 'menunggu' : ($booking->status === 'accepted' ? 'diterima' : 'selesai')) }}
       </span>
       </td>
       <td>
       <div class="action-buttons">
       @if($booking->status === 'pending')
       <form action="{{ route('teacher.bookings.accept', $booking) }}" method="POST" style="display:inline-block"
-      onsubmit="return confirm('Are you sure you want to accept this booking?')">
+      onsubmit="return confirm('Apakah Anda yakin ingin menerima pemesanan ini?')">
       @csrf
       @method('PUT')
-      <button type="submit" class="btn btn-success btn-sm">Accept</button>
+      <button type="submit" class="btn btn-success btn-sm">Terima</button>
       </form>
       @elseif($booking->status === 'accepted')
       <form action="{{ route('teacher.bookings.complete', $booking) }}" method="POST" style="display:inline-block"
-      onsubmit="return confirm('Are you sure you want to mark this booking as completed?')">
+      onsubmit="return confirm('Apakah Anda yakin ingin menandai pemesanan ini sebagai selesai?')">
       @csrf
       @method('PUT')
-      <button type="submit" class="btn btn-primary btn-sm">Mark Completed</button>
+      <button type="submit" class="btn btn-primary btn-sm">Tandai Selesai</button>
       </form>
       @else
-      <span class="text-success">Completed</span>
+      <span class="text-success">Selesai</span>
       @endif
       </div>
       </td>
