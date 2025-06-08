@@ -7,26 +7,26 @@
     <div class="glow-effect"></div>
     <div class="card">
     <div class="card-header">
-      <h1 class="card-title animate-gradient">Sign In</h1>
-      <p class="card-subtitle">Welcome back! Sign in to your account</p>
+      <h1 class="card-title animate-gradient">Masuk</h1>
+      <p class="card-subtitle">Selamat datang kembali! Masuk ke akun Anda</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" class="form">
       @csrf
 
       <div class="form-group">
-      <label for="email" class="form-label">Email Address</label>
+      <label for="email" class="form-label">Alamat Email</label>
       <input type="email" name="email" id="email" class="form-input" required autofocus
-        placeholder="Enter your email">
+        placeholder="Masukkan email Anda">
       @error('email')
       <span class="form-error">{{ $message }}</span>
     @enderror
       </div>
 
       <div class="form-group">
-      <label for="password" class="form-label">Password</label>
+      <label for="password" class="form-label">Kata Sandi</label>
       <input type="password" name="password" id="password" class="form-input" required
-        placeholder="Enter your password">
+        placeholder="Masukkan kata sandi Anda">
       @error('password')
       <span class="form-error">{{ $message }}</span>
     @enderror
@@ -34,19 +34,19 @@
 
       <div class="form-checkbox">
       <input type="checkbox" name="remember" id="remember" class="checkbox">
-      <label for="remember" class="checkbox-label">Remember me</label>
+      <label for="remember" class="checkbox-label">Ingat saya</label>
       </div>
 
       <div>
       <button type="submit" class="form-button animate-gradient">
-        Sign In
+        Masuk
       </button>
       </div>
     </form>
 
     <p class="card-footer">
-      Don't have an account?
-      <a href="{{ route('register') }}" class="link">Sign up</a>
+      Belum punya akun?
+      <a href="{{ route('register') }}" class="link">Daftar</a>
     </p>
     </div>
   </div>
@@ -150,7 +150,7 @@
     background: rgba(255, 255, 255, 0.5);
     color: #111827;
     font-size: 1rem;
-    transition: all 0.3s Palm Beach Gardens, FL, USA-in-out;
+    transition: all 0.3s ease-in-out;
     outline: none;
     }
 
