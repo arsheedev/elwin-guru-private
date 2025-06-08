@@ -39,7 +39,7 @@ class RegisterController extends Controller
             'village_id' => 'required|exists:villages,id',
             'subject_id' => 'required_if:role,teacher|nullable|exists:subjects,id',
             'profile_image' => 'required_if:role,teacher|nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'price' => 'required_if:role,teacher|nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'price' => 'required_if:role,teacher|integer|min:0',
         ]);
 
         $user = User::create([

@@ -104,6 +104,16 @@
     @enderror
       </div>
 
+      <!-- Harga (untuk guru) -->
+      <div class="form-group" id="price-field" style="display: none;">
+      <label for="price" class="form-label">Harga (per sesi)</label>
+      <input type="number" name="price" id="price" class="form-input" value="{{ old('price') }}"
+        placeholder="Masukkan harga per sesi (Rp)" min="0" step="1000">
+      @error('price')
+      <span class="form-error">{{ $message }}</span>
+    @enderror
+      </div>
+
       <!-- Provinsi -->
       <div class="form-group">
       <label for="province_id" class="form-label">Provinsi</label>
@@ -174,7 +184,6 @@
     padding: 0;
     }
 
-    /* Page container with white gradient background */
     .page-container {
     min-height: 100vh;
     display: flex;
@@ -185,7 +194,6 @@
     overflow: hidden;
     }
 
-    /* Enhanced glow effect with vibrant blue */
     .glow-effect {
     position: absolute;
     top: 0;
@@ -201,7 +209,6 @@
     pointer-events: none;
     }
 
-    /* Card styling */
     .card {
     max-width: 640px;
     width: 100%;
@@ -215,7 +222,6 @@
     backdrop-filter: blur(10px);
     }
 
-    /* Card header */
     .card-header {
     margin-bottom: 32px;
     text-align: center;
@@ -435,6 +441,7 @@
     const roleSelect = document.getElementById('role');
     const subjectField = document.getElementById('subject-field');
     const profileImageField = document.getElementById('profile-image-field');
+    const priceField = document.getElementById('price-field');
     const profileImageInput = document.getElementById('profile_image');
     const profileImagePreview = document.getElementById('profile-image-preview');
 
@@ -443,6 +450,7 @@
       const isTeacher = roleSelect.value === 'teacher';
       subjectField.style.display = isTeacher ? 'block' : 'none';
       profileImageField.style.display = isTeacher ? 'block' : 'none';
+      priceField.style.display = isTeacher ? 'block' : 'none';
     }
 
     roleSelect.addEventListener('change', toggleTeacherFields);
