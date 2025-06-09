@@ -449,24 +449,50 @@
     function toggleTeacherFields() {
       const isTeacher = roleSelect.value === 'teacher';
       subjectField.style.display = isTeacher ? 'block' : 'none';
-      profileImageField.style.display = isTeacher ? 'block' : 'none';
       priceField.style.display = isTeacher ? 'block' : 'none';
+      if (profileImageField) {
+      profileImageField.style.display = isTeacher ? 'block' : 'none';
+      if (profileImageInput) {
+        profileImageInput.disabled = !isTeacher;
+        if (!isTeacher) {
+        profileImageInput.value = ''; // Clear file input
+        if (profileImagePreview) {
+          profileImagePreview.src = '{{ asset('images/default-profile.png') }}';
+          profileImagePreview.style.display = 'none';
+        }
+        } else {
+        if (profileImagePreview) {
+          profileImagePreview.style.display = 'block';
+        }
+        }
+      }
+      }
+      if (!isTeacher) {
+      document.getElementById('subject_id').value = '';
+      document.getElementById('price').value = '';
+      }
     }
 
     roleSelect.addEventListener('change', toggleTeacherFields);
     toggleTeacherFields(); // Run on page load
 
-    // Profile image preview
-    profileImageInput.addEventListener('change', () => {
+    // Profile image preview (only for teacher)
+    if (profileImageInput) {
+      profileImageInput.addEventListener('change', () => {
       const file = profileImageInput.files[0];
-      if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
+      if (file && profileImagePreview) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
         profileImagePreview.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+        profileImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else if (profileImagePreview) {
+        profileImagePreview.src = '{{ asset('images/default-profile.png') }}';
+        profileImagePreview.style.display = 'block';
       }
-    });
+      });
+    }
 
     // Cascading dropdowns
     const province = document.getElementById('province_id');
@@ -488,7 +514,8 @@
       })
       .catch(err => {
         console.error('Kesalahan saat mengambil data:', err);
-        target.innerHTML = `<option value="">Kesalahan saat memuat ${placeholder}</option>`;
+        target.innerHTML = `<option value="">Gagal memuat ${placeholder}</option>`;
+        alert(`Gagal memuat ${placeholder}. Silakan coba lagi.`);
       });
     }
 
