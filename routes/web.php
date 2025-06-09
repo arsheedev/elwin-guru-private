@@ -55,10 +55,10 @@ Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function
 // Student Routes
 Route::middleware(['auth'])->prefix('student')->name('student.')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('teachers.search');
-
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.student.index');
-    Route::get('/student/teacher-detail/{teacher}', [StudentController::class, 'show'])->name('teachers.show');
+    Route::post('/bookings/{booking}/cancel', [BookingController::class, 'canceled'])->name('bookings.cancel');
+    Route::get('/teacher-detail/{teacher}', [StudentController::class, 'show'])->name('teachers.show');
     Route::get('/ratings/create/{booking}', [RatingController::class, 'create'])->name('ratings.create');
     Route::post('/ratings/store', [RatingController::class, 'store'])->name('ratings.store');
 });

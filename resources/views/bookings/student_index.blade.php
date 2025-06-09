@@ -1,6 +1,6 @@
 @extends('layouts.students')
 
-@section('title', 'Your Bookings')
+@section('title', 'Pemesanan Anda')
 
 @section('content')
   <style>
@@ -84,6 +84,28 @@
     transform: translateY(-1px);
     }
 
+    .btn-danger {
+    background: linear-gradient(to right, #ef4444, #b91c1c);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: #ffffff;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+    cursor: pointer;
+    }
+
+    .btn-danger:hover {
+    background: linear-gradient(to right, #dc2626, #991b1b);
+    transform: translateY(-1px);
+    }
+
+    .btn-danger:active {
+    transform: translateY(0);
+    }
+
     .no-bookings {
     font-size: 1rem;
     color: #6b7280;
@@ -143,6 +165,11 @@
       padding: 0.5rem 0.75rem;
     }
 
+    .btn-danger {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+    }
+
     .alert-success {
       font-size: 0.9rem;
       margin: 0 1rem 1rem;
@@ -155,41 +182,66 @@
   </style>
 
   <div class="container">
-    <h2>Your Bookings</h2>
+    <h2>Pemesanan Anda</h2>
 
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    @if(session('error'))
+    <div class="alert alert-error">{{ session('error') }}</div>
+    @endif
 
     @if($bookings->isEmpty())
-    <p class="no-bookings">No bookings found.</p>
+    <p class="no-bookings">Tidak ada pemesanan ditemukan.</p>
     @else
     <table class="table">
     <thead>
       <tr>
-      <th>Teacher</th>
-      <th>Schedule</th>
+      <th>Guru</th>
+      <th>Jadwal</th>
       <th>Status</th>
-      <th>Action</th>
+      <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
+      @php
+      $daysInIndonesian = [
+      'monday' => 'Senin',
+      'tuesday' => 'Selasa',
+      'wednesday' => 'Rabu',
+      'thursday' => 'Kamis',
+      'friday' => 'Jumat',
+      'saturday' => 'Sabtu',
+      'sunday' => 'Minggu'
+      ];
+    @endphp
       @foreach($bookings as $booking)
       <tr>
       <td>{{ $booking->teacher->user->name }}</td>
-      <td>{{ ucfirst($booking->schedule->day) }} at {{ $booking->schedule->clock }}</td>
+      <td>{{ $daysInIndonesian[strtolower($booking->schedule->day)] }} pada {{ $booking->schedule->clock }}</td>
       <td>
       <span class="badge badge-{{ $booking->status }}">
-      {{ ucfirst($booking->status) }}
+      {{ ucfirst($booking->status == 'pending' ? 'menunggu' : ($booking->status == 'accepted' ? 'diterima' : ($booking->status == 'canceled' ? 'dibatalkan' : 'selesai'))) }}
       </span>
       </td>
       <td>
       @if($booking->status === 'completed' && !$booking->rating)
-      <a href="{{ route('student.ratings.create', $booking->id) }}" class="btn btn-primary btn-sm">Give Rating</a>
+      <a href="{{ route('student.ratings.create', $booking->id) }}" class="btn btn-primary btn-sm">Beri
+      Penilaian</a>
+      @elseif($booking->status === 'pending' && !$booking->rating)
+      @if ($booking->status === 'pending')
+      <form
+      action="{{ auth()->user()->role === 'student' ? route('student.bookings.cancel', $booking) : route('teacher.bookings.cancel', $booking) }}"
+      method="POST">
+      @csrf
+      @method('POST')
+      <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+      </form>
+      @endif
       @elseif($booking->rating)
-      <span class="text-success">Rated</span>
+      <span class="text-success">Sudah Dinilai</span>
       @else
-      <span class="text-muted">N/A</span>
+      <span class="text-muted">T/A</span>
       @endif
       </td>
       </tr>

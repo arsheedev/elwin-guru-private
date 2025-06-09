@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Province;
 use App\Models\Subject;
 use App\Models\Teacher;
@@ -49,7 +50,6 @@ class StudentController extends Controller
 
         return view('student.index', compact('teachers', 'subjects', 'provinces', 'request'));
     }
-
     public function show($id)
     {
         $teacher = Teacher::with([
@@ -61,10 +61,21 @@ class StudentController extends Controller
             'village',
             'schedules' => function ($q) {
                 $q->where('is_available', true);
-            }
+            },
+            'bookings'
         ])->findOrFail($id);
 
-        return view('student.teachers.show', compact('teacher'));
+        // Count unique students who booked this teacher
+        $studentCount = $teacher->bookings()->distinct('student_id')->count('student_id');
+
+        // Get the latest booking with rating and student name
+        $latestRating = Booking::where('teacher_id', $id)
+            ->whereNotNull('rating')
+            ->with('student.user')
+            ->latest('updated_at')
+            ->first();
+
+        return view('student.teachers.show', compact('teacher', 'studentCount', 'latestRating'));
     }
 
 }

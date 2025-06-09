@@ -344,37 +344,135 @@
     padding: 4rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    background: #f9fafb;
+    border-radius: 16px;
     }
 
     .teachers-section h2 {
     font-size: 2.5rem;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    }
+
+    .teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
     }
 
     .teacher-card {
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    }
+
+    .teacher-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .teacher-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
     }
 
     .teacher-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+    }
+
+    .teacher-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #f59e0b;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    font-family: 'Poppins', sans-serif;
+    }
+
+    .teacher-rating svg {
+    width: 18px;
+    height: 18px;
+    fill: #f59e0b;
     }
 
     .teacher-card p {
-    color: #6b7280;
+    color: #4b5563;
     margin: 0.5rem 0;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.5;
+    }
+
+    .teacher-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #15803d;
+    background: #dcfce7;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 0.75rem 0;
+    }
+
+    .teacher-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+    font-size: 0.95rem;
+    }
+
+    .teacher-location svg {
+    width: 18px;
+    height: 18px;
+    fill: #6b7280;
+    }
+
+    .teacher-card a.profile-button {
+    background: #3b82f6;
+    color: #ffffff;
+    padding: 0.6rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 1rem;
+    }
+
+    .teacher-card a.profile-button:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
     }
 
     .no-results {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #6b7280;
     text-align: center;
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem;
     }
 
     @media (max-width: 768px) {
@@ -438,10 +536,45 @@
       width: 60px;
       height: 60px;
     }
+
+    .teachers-section {
+      padding: 2rem 1rem;
+    }
+
+    .teachers-section h2 {
+      font-size: 2rem;
+    }
+
+    .teachers-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .teacher-card h3 {
+      font-size: 1.4rem;
+    }
+
+    .teacher-rating {
+      font-size: 0.9rem;
+    }
+
+    .teacher-rating svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .teacher-price {
+      font-size: 1.1rem;
+    }
+
+    .teacher-card a.profile-button {
+      width: 100%;
+      text-align: center;
+    }
     }
   </style>
 
-  <!-- Hero Section -->
+  <!-- Hero Section (Tidak Diubah) -->
   <section class="hero-section">
     <div class="bg-circle-1"></div>
     <div class="bg-circle-2"></div>
@@ -477,44 +610,103 @@
       <select id="village_id" name="village_id" class="search-select" disabled>
         <option value="">Pilih Desa</option>
       </select>
+      <select name="price_range" id="price_range" class="search-select">
+        <option value="">Pilih Rentang Harga</option>
+        <option value="100000-200000" {{ $request->price_range == '100000-200000' ? 'selected' : '' }}>Rp 100,000 - Rp
+        200,000</option>
+        <option value="200001-300000" {{ $request->price_range == '200001-300000' ? 'selected' : '' }}>Rp 200,001 - Rp
+        300,000</option>
+        <option value="300001-400000" {{ $request->price_range == '300001-400000' ? 'selected' : '' }}>Rp 300,001 - Rp
+        400,000</option>
+        <option value="400001-500000" {{ $request->price_range == '400001-500000' ? 'selected' : '' }}>Rp 400,001 - Rp
+        500,000</option>
+        <option value="500001-600000" {{ $request->price_range == '500001-600000' ? 'selected' : '' }}>Rp 500,001 - Rp
+        600,000</option>
+        <option value="600001-700000" {{ $request->price_range == '600001-700000' ? 'selected' : '' }}>Rp 600,001 - Rp
+        700,000</option>
+        <option value="700001-800000" {{ $request->price_range == '700001-800000' ? 'selected' : '' }}>Rp 700,001 - Rp
+        800,000</option>
+        <option value="800001-900000" {{ $request->price_range == '800001-900000' ? 'selected' : '' }}>Rp 800,001 - Rp
+        900,000</option>
+        <option value="900001-1000000" {{ $request->price_range == '900001-1000000' ? 'selected' : '' }}>Rp 900,001 - Rp
+        1,000,000</option>
+      </select>
       </div>
       <div class="form-actions">
       <button type="submit">Cari</button>
       <a href="{{ route('student.teachers.search') }}" class="reset-button">Reset</a>
       </div>
+      <input type="hidden" name="min_price" id="min_price">
+      <input type="hidden" name="max_price" id="max_price">
     </form>
     </div>
   </section>
 
-  <!-- Teachers Section -->
+  <!-- Teachers Section (Hanya bagian rating yang diperbarui) -->
   <section class="teachers-section">
     <h2>Guru Terbaru</h2>
     @if($teachers->isEmpty())
     <p class="no-results">Tidak ada guru yang ditemukan.</p>
     @else
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+    <div class="teachers-grid">
     @foreach($teachers as $teacher)
     <div class="teacher-card">
       <h3>{{ $teacher->user->name }}</h3>
+      <div class="teacher-rating">
+      @php
+      $rating = $teacher->average_ratings ?? 0;
+      $fullStars = floor($rating);
+      $halfStar = ($rating - $fullStars) >= 0.5 ? 1 : 0;
+      $emptyStars = 5 - $fullStars - $halfStar;
+      @endphp
+      @if($rating > 0)
+      @for ($i = 0; $i < $fullStars; $i++)
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+      </svg>
+      @endfor
+      @if ($halfStar)
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2v15.27z" />
+      </svg>
+      @endif
+      @for ($i = 0; $i < $emptyStars; $i++)
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path
+      d="M22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24zm-10 6.73V6.73L14.81 13l6.92.59-5.46 4.73L18.18 21l-6.18-3.73z" />
+      </svg>
+      @endfor
+      <span>{{ number_format($rating, 1) }}</span>
+    @else
+      <span class="no-rating">Belum ada rating</span>
+    @endif
+      </div>
       <p>Mata Pelajaran: {{ $teacher->subject->name ?? '-' }}</p>
-      <p>Lokasi:
-      {{ $teacher->province->name ?? '-' }},
-      {{ $teacher->regency->name ?? '-' }},
+      <div class="teacher-price">Rp {{ number_format($teacher->price ?? 100000, 0, ',', '.') }}/jam</div>
+      <div class="teacher-location">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path
+      d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+      </svg>
+      <span>
+      {{ $teacher->village->name ?? '-' }},
       {{ $teacher->district->name ?? '-' }},
-      {{ $teacher->village->name ?? '-' }}
-      </p>
+      {{ $teacher->regency->name ?? '-' }},
+      {{ $teacher->province->name ?? '-' }}
+      </span>
+      </div>
       <p>Telepon: {{ $teacher->no_telepon ?? '-' }}</p>
       <a href="{{ route('student.teachers.show', $teacher->id) }}" class="profile-button">Lihat Profil</a>
     </div>
     @endforeach
     </div>
-    <div class="pagination" style="margin-top: 2rem;">
+    <div class="pagination" style="margin-top: 2.5rem; text-align: center;">
     {{ $teachers->withQueryString()->links() }}
     </div>
     @endif
   </section>
 
-  <!-- CTA Section -->
+  <!-- CTA Section (Tidak Diubah) -->
   <div class="cta-wrapper">
     <div class="cta-container">
     <div class="image-box">
@@ -529,7 +721,7 @@
     </div>
   </div>
 
-  <!-- Testimonial Section -->
+  <!-- Testimonial Section (Tidak Diubah) -->
   <div class="testimonial-wrapper">
     <div class="testimonial-section">
     <div class="section-title">
@@ -581,11 +773,13 @@
 @section('scripts')
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-    // Cascading dropdowns
     const province = document.getElementById('province_id');
     const regency = document.getElementById('regency_id');
     const district = document.getElementById('district_id');
     const village = document.getElementById('village_id');
+    const priceRange = document.getElementById('price_range');
+    const minPriceInput = document.getElementById('min_price');
+    const maxPriceInput = document.getElementById('max_price');
 
     function fetchOptions(url, target, placeholder = 'Pilih') {
       target.innerHTML = `<option value="">-- Loading ${placeholder} --</option>`;
@@ -653,7 +847,19 @@
       }
     });
 
-    // Initialize dropdowns if old input exists
+    priceRange.addEventListener('change', () => {
+      const [min, max] = priceRange.value ? priceRange.value.split('-') : ['', ''];
+      minPriceInput.value = min;
+      maxPriceInput.value = max;
+    });
+
+    @if ($request->has('price_range'))
+    priceRange.value = '{{ $request->price_range }}';
+    const [min, max] = priceRange.value ? priceRange.value.split('-') : ['', ''];
+    minPriceInput.value = min;
+    maxPriceInput.value = max;
+    @endif
+
     @if (request()->has('province_id'))
     console.log('Initializing regency for province_id: {{ request()->province_id }}');
     fetchOptions('/api/regencies/{{ request()->province_id }}', regency, 'Pilih Kabupaten');
@@ -676,7 +882,6 @@
       }, 100);
     @endif
 
-      // Testimonial carousel logic
       const items = document.querySelectorAll('.testimonial-item');
     let current = 0;
 

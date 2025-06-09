@@ -86,11 +86,11 @@ class BookingController extends Controller
         // $this->authorize('update', $booking);
 
         if ($booking->status !== 'pending') {
-            return redirect()->back()->with('error', 'Booking cannot be accepted.');
+            return redirect()->back()->with('error', 'Booking cannot be canceled.');
         }
 
         $booking->update(['status' => 'canceled']);
-        $booking->schedule->update(['is_available' => false]);
+        $booking->schedule->update(['is_available' => true]); // Free the schedule slot
 
         return redirect()->back()->with('success', 'Booking canceled.');
     }
