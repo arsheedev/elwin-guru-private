@@ -156,7 +156,7 @@
                 </div>
                 <div class="role-container">
                     <span class="role">{{ $user->role === 'teacher' ? 'Guru' : $user->role }}</span>
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="logout-button">Keluar</button>
                     </form>
