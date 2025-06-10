@@ -574,7 +574,7 @@
     }
   </style>
 
-  <!-- Hero Section (Tidak Diubah) -->
+
   <section class="hero-section">
     <div class="bg-circle-1"></div>
     <div class="bg-circle-2"></div>
@@ -642,7 +642,7 @@
     </div>
   </section>
 
-  <!-- Teachers Section (Hanya bagian rating yang diperbarui) -->
+  <!-- Teachers Section -->
   <section class="teachers-section">
     <h2>Guru Terbaru</h2>
     @if($teachers->isEmpty())
@@ -706,7 +706,7 @@
     @endif
   </section>
 
-  <!-- CTA Section (Tidak Diubah) -->
+  <!-- CTA Section -->
   <div class="cta-wrapper">
     <div class="cta-container">
     <div class="image-box">
@@ -721,7 +721,7 @@
     </div>
   </div>
 
-  <!-- Testimonial Section (Tidak Diubah) -->
+  <!-- Testimonial Section -->
   <div class="testimonial-wrapper">
     <div class="testimonial-section">
     <div class="section-title">
